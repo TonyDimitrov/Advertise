@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Advertise.Api.Migrations
 {
     [DbContext(typeof(AdvertDbContext))]
-    [Migration("20200612154010_InitialMigration")]
+    [Migration("20200706151959_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,65 @@ namespace Advertise.Api.Migrations
                 .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Advertise.Api.Data.Models.Advertise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactPerson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Advertises");
+                });
 
             modelBuilder.Entity("Advertise.Api.Data.Models.Image", b =>
                 {
@@ -49,27 +108,27 @@ namespace Advertise.Api.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PropertyId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("PropertyId");
 
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("Advertise.Api.Data.Models.Product", b =>
+            modelBuilder.Entity("Advertise.Api.Data.Models.Property", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Condition")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContactEmail")
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContactPhone")
+                    b.Property<string>("County")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -78,20 +137,20 @@ namespace Advertise.Api.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("Deposit")
+                        .HasColumnType("float");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("DiscountedPrice")
                         .HasColumnType("float");
 
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsVip")
-                        .HasColumnType("bit");
+                    b.Property<string>("Lease")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
@@ -99,28 +158,15 @@ namespace Advertise.Api.Migrations
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("QuantityAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
+                    b.Property<string>("Town")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("Products");
+                    b.ToTable("Properties");
                 });
 
             modelBuilder.Entity("Advertise.Api.Data.Models.Raffle", b =>
@@ -196,6 +242,9 @@ namespace Advertise.Api.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PropertyId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rate")
                         .HasColumnType("int");
 
@@ -204,7 +253,7 @@ namespace Advertise.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("PropertyId");
 
                     b.HasIndex("UserId");
 
@@ -255,35 +304,33 @@ namespace Advertise.Api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Advertise.Api.Data.Models.Image", b =>
+            modelBuilder.Entity("Advertise.Api.Data.Models.Advertise", b =>
                 {
-                    b.HasOne("Advertise.Api.Data.Models.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("Advertise.Api.Data.Models.Property", "Property")
+                        .WithOne("Advertise")
+                        .HasForeignKey("Advertise.Api.Data.Models.Advertise", "PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Advertise.Api.Data.Models.User", "User")
+                        .WithMany("Advertises")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Advertise.Api.Data.Models.Product", b =>
+            modelBuilder.Entity("Advertise.Api.Data.Models.Image", b =>
                 {
-                    b.HasOne("Advertise.Api.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Advertise.Api.Data.Models.User", null)
-                        .WithMany("Products")
-                        .HasForeignKey("UserId1");
+                    b.HasOne("Advertise.Api.Data.Models.Property", "Property")
+                        .WithMany("Images")
+                        .HasForeignKey("PropertyId");
                 });
 
             modelBuilder.Entity("Advertise.Api.Data.Models.Review", b =>
                 {
-                    b.HasOne("Advertise.Api.Data.Models.Product", "Product")
+                    b.HasOne("Advertise.Api.Data.Models.Property", "Property")
                         .WithMany("Reviews")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PropertyId");
 
                     b.HasOne("Advertise.Api.Data.Models.User", null)
                         .WithMany("Reviews")

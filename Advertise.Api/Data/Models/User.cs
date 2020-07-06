@@ -7,7 +7,7 @@
         public User()
         {
             this.Reviews = new HashSet<Review>();
-            this.Products = new HashSet<Product>();
+            this.Advertises = new HashSet<Advertise>();
         }
 
         public string FirstName { get; set; }
@@ -20,7 +20,7 @@
 
         public string PhoneNumber { get; set; }
 
-        public virtual HashSet<Product> Products { get; set; }
+        public virtual HashSet<Advertise> Advertises { get; set; }
 
         public virtual HashSet<Review> Reviews { get; set; }
     }

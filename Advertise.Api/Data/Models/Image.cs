@@ -4,7 +4,7 @@
     {
         public int ProductId { get; set; }
 
-        public Product Product { get; set; }
+        public virtual Property Property { get; set; }
 
         public string Name { get; set; }
 

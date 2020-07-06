@@ -10,7 +10,7 @@
             this.RegisteredUsers = new HashSet<User>();
         }
         public bool IsActive { get; set; }
-
+         
         public DateTime StartDate { get; set; }
 
         public DateTime EndData { get; set; }
