@@ -7,6 +7,7 @@ namespace Advertise.Api.ViewModels
         public AdvertiseType Type { get; set; }
 
         public string Image { get; set; }
+        public string Title { get; set; }
 
         public PropertyVm Property { get; set; }
     }

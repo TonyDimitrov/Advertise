@@ -1,4 +1,6 @@
-﻿namespace Advertise.Api.ViewModels
+﻿using System.Collections.Generic;
+
+namespace Advertise.Api.ViewModels
 {
     public class PageAdvertisesVm
     {
@@ -18,6 +20,6 @@
 
         public bool IsLastPage { get; set; }
 
-        public AdvertisesVm Advertises { get; set; }
+        public IEnumerable<AdvertisesVm> Advertises { get; set; }
     }
 }

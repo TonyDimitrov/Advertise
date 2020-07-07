@@ -2,7 +2,7 @@
 {
     public class Image : BaseModel
     {
-        public int ProductId { get; set; }
+        public int PropertyId { get; set; }
 
         public virtual Property Property { get; set; }
 

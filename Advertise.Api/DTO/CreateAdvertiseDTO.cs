@@ -18,6 +18,6 @@ namespace Advertise.Api.DTO
 
         public string ContactEmail { get; set; }
 
-        public List<CreatePropertyDTO> Property { get; set; }
+        public CreatePropertyDTO Property { get; set; }
     }
 }

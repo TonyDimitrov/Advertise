@@ -13,8 +13,6 @@ namespace Advertise.Api.Data.Models
 
         public DateTime ExpirationDate { get; set; }
 
-        public string Description { get; set; }
-
         public string ContactPerson { get; set; }
 
         public string ContactPhone { get; set; }

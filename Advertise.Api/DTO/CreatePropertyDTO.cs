@@ -21,6 +21,6 @@ namespace Advertise.Api.DTO
 
         public string Town { get; set; }
 
-        public List<IEnumerable<IFormFile>> Images { get; set; }
+        public IEnumerable<IFormFile> Images { get; set; }
     }
 }
