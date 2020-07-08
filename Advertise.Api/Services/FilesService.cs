@@ -1,14 +1,32 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Advertise.Api.Services
 {
     public class FilesService : IFilesService
     {
-        public IEnumerable<string> SaveFiles(IEnumerable<IFormFile> formFiles, string path)
+        public async IAsyncEnumerable<string> SaveFiles(IEnumerable<IFormFile> formFiles, string path)
         {
-            throw new NotImplementedException();
+            foreach (var file in formFiles)
+            {
+                var uniqueName = Guid.NewGuid().ToString();
+
+                var fullPath = Path.Combine(path, uniqueName);
+                var extension = file.Name
+                        .Split('.', StringSplitOptions.RemoveEmptyEntries)
+                        .LastOrDefault();
+                Path.ChangeExtension(fullPath, extension);
+
+                using (var stream = File.Create(fullPath))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                yield return fullPath;
+            }
         }
     }
 }

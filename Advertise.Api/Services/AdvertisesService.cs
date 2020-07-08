@@ -18,8 +18,11 @@ namespace Advertise.Api.Services
             this.advertiseRepository = advertiseRepository;
             this.filesService = filesService;
         }
-        public async Task<PageAdvertisesVm> Get(int pageSize, int page)
+        public async Task<PageAdvertisesVm> Get(int? pageSize, int? page)
         {
+            pageSize ??= 5;
+            page ??= 1;
+
             var advertises = this.advertiseRepository.All()
                 .OrderByDescending(ad => ad.CreatedOn)
                 .Select(ad => new AdvertisesVm
@@ -34,8 +37,8 @@ namespace Advertise.Api.Services
                         Price = ad.Property.Price
                     }
                 })
-                .Skip(pageSize * (page - 1))
-                .Take(pageSize)
+                .Skip(pageSize.Value * (page.Value - 1))
+                .Take(pageSize.Value)
                 .ToList();
 
             var totalPages = (int)Math.Ceiling(this.advertiseRepository.All().Count() / (double)pageSize);
@@ -43,8 +46,8 @@ namespace Advertise.Api.Services
             var advertisePage = new PageAdvertisesVm
             {
                 Advertises = advertises,
-                Page = page,
-                PageSize = pageSize,
+                Page = page.Value,
+                PageSize = pageSize.Value,
                 TotalPages = totalPages,
                 IsFirstPage = page == 1,
                 IsLastPage = page == totalPages
@@ -53,7 +56,7 @@ namespace Advertise.Api.Services
             return await Task.FromResult(advertisePage);
         }
 
-        public Task<PageAdvertisesVm> Create(CreateAdvertiseDTO advertise, int userId, string filePath)
+        public async Task Create(CreateAdvertiseDTO advertise, int userId, string filePath)
         {
             var ad = new Data.Models.Advertise
             {
@@ -76,7 +79,7 @@ namespace Advertise.Api.Services
                     Lease = advertise.Property.Lease,
                     Price = advertise.Property.Price,
                     Deposit = advertise.Property.Deposit,
-                    Images = this.filesService.SaveFiles(advertise.Property.Images, filePath)
+                    Images = (await this.filesService.SaveFiles(advertise.Property.Images, filePath).ToListAsync())
                     .Select(img => new Image
                     {
                         Name = img,
@@ -86,7 +89,9 @@ namespace Advertise.Api.Services
                 }
             };
 
-            throw new NotImplementedException();
+            await this.advertiseRepository.AddAsync(ad);
+
+            await this.advertiseRepository.SaveChangesAsync();
         }
 
         public Task<PageAdvertisesVm> Update(CreateAdvertiseDTO advertise)

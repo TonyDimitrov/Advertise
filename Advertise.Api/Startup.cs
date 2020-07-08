@@ -2,6 +2,7 @@ namespace Advertise.Api
 {
     using Advertise.Api.Data;
     using Advertise.Api.Data.Repository;
+    using Advertise.Api.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -21,10 +22,12 @@ namespace Advertise.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<AdvertDbContext>(
               options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+
+            services.AddTransient<IAdvertisesService, AdvertisesService>();
+            services.AddTransient<IFilesService, FilesService>();
 
             services.AddControllers();
         }

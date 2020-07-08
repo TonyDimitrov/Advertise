@@ -4,14 +4,16 @@ using Advertise.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Advertise.Api.Migrations
 {
     [DbContext(typeof(AdvertDbContext))]
-    partial class AdvertDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200708183925_ModelsUpdate")]
+    partial class ModelsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
