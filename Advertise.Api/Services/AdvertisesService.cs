@@ -2,7 +2,6 @@
 using Advertise.Api.Data.Repository;
 using Advertise.Api.DTO;
 using Advertise.Api.ViewModels;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,9 +18,10 @@ namespace Advertise.Api.Services
             this.advertiseRepository = advertiseRepository;
             this.filesService = filesService;
         }
-        public Task<PageAdvertisesVm> Get(int pageSize, int page)
+        public async Task<PageAdvertisesVm> Get(int pageSize, int page)
         {
             var advertises = this.advertiseRepository.All()
+                .OrderByDescending(ad => ad.CreatedOn)
                 .Select(ad => new AdvertisesVm
                 {
                     Image = ad.Property.Images.FirstOrDefault().Name,
@@ -50,7 +50,7 @@ namespace Advertise.Api.Services
                 IsLastPage = page == totalPages
             };
 
-            return Task.FromResult(advertisePage);
+            return await Task.FromResult(advertisePage);
         }
 
         public Task<PageAdvertisesVm> Create(CreateAdvertiseDTO advertise, int userId, string filePath)

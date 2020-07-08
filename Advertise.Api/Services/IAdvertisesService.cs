@@ -8,7 +8,7 @@ namespace Advertise.Api.Services
     {
         Task<PageAdvertisesVm> Get(int pageSize, int page);
 
-        Task<PageAdvertisesVm> Create(CreateAdvertiseDTO advertise, int userId);
+        Task<PageAdvertisesVm> Create(CreateAdvertiseDTO advertise, int userId, string filePath);
 
         Task<PageAdvertisesVm> Update(CreateAdvertiseDTO advertise);
 
