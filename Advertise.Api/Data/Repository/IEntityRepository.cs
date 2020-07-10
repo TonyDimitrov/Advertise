@@ -12,7 +12,9 @@
 
         void Edit(T entity);
 
-        void Delete(T entity);
+        void HardDelete(T entity);
+
+        Task SoftDelete(T entity);
 
         Task<int> SaveChangesAsync();
     }

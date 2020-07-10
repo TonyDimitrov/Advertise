@@ -1,11 +1,17 @@
 ﻿using Advertise.Api.Constants;
 using Advertise.Api.Data.Models.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Advertise.Api.DTO
 {
-    public class CreateAdvertiseDTO
+    public class UpdateAdvertiseDTO
     {
+        public int Id { get; set; }
+
         public AdvertiseType Type { get; set; }
 
         public Category Category { get; set; }

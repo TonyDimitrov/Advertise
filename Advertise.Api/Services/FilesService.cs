@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Advertise.Api.Services
 {
@@ -10,22 +11,30 @@ namespace Advertise.Api.Services
     {
         public async IAsyncEnumerable<string> SaveFiles(IEnumerable<IFormFile> formFiles, string path)
         {
-            foreach (var file in formFiles)
+            if (formFiles == null || formFiles.Count() == 0)
             {
-                var uniqueName = Guid.NewGuid().ToString();
+                yield return null;
+            }
+            else
+            {
 
-                var fullPath = Path.Combine(path, uniqueName);
-                var extension = file.Name
-                        .Split('.', StringSplitOptions.RemoveEmptyEntries)
-                        .LastOrDefault();
-                Path.ChangeExtension(fullPath, extension);
-
-                using (var stream = File.Create(fullPath))
+                foreach (var file in formFiles)
                 {
-                    await file.CopyToAsync(stream);
-                }
+                    var uniqueName = Guid.NewGuid().ToString();
 
-                yield return fullPath;
+                    var fullPath = Path.Combine(path, uniqueName);
+                    var extension = file.Name
+                            .Split('.', StringSplitOptions.RemoveEmptyEntries)
+                            .LastOrDefault();
+                    Path.ChangeExtension(fullPath, extension);
+
+                    using (var stream = File.Create(fullPath))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    yield return fullPath;
+                }
             }
         }
     }

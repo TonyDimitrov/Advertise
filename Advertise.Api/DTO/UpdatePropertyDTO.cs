@@ -1,12 +1,12 @@
-﻿using Advertise.Api.Constants;
+﻿
+using Advertise.Api.Constants;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace Advertise.Api.DTO
 {
-    public class CreatePropertyDTO
+    public class UpdatePropertyDTO
     {
         [MaxLength(ValidationConstants.PropertyDescriptionMaxLen)]
         [MinLength(ValidationConstants.PropertyDescriptionMinLen)]
@@ -34,7 +34,6 @@ namespace Advertise.Api.DTO
         [MinLength(ValidationConstants.PropertyTownMinLen)]
         public string Town { get; set; }
 
-        [JsonIgnore]
         public IEnumerable<IFormFile> Images { get; set; }
     }
 }

@@ -6,12 +6,14 @@ namespace Advertise.Api.Services
 {
     public interface IAdvertisesService
     {
+        Task<Data.Models.Advertise> GetById(int id);
+
         Task<PageAdvertisesVm> Get(int? pageSize, int? page);
 
         Task Create(CreateAdvertiseDTO advertise, int userId, string filePath);
 
-        Task<PageAdvertisesVm> Update(CreateAdvertiseDTO advertise);
+        Task<bool> Update(UpdateAdvertiseDTO advertise, string filePath);
 
-        Task<PageAdvertisesVm> Delete(CreateAdvertiseDTO advertise);
+        Task<bool> Delete(int id);
     }
 }

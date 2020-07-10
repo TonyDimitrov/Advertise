@@ -2,6 +2,7 @@
 using Advertise.Api.Data.Repository;
 using Advertise.Api.DTO;
 using Advertise.Api.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,7 +73,6 @@ namespace Advertise.Api.Services
                 {
                     CreatedOn = DateTime.UtcNow,
                     Country = advertise.Property.Country,
-                    County = advertise.Property.County,
                     Town = advertise.Property.Town,
                     Location = advertise.Property.Location,
                     Description = advertise.Property.Description,
@@ -94,14 +94,52 @@ namespace Advertise.Api.Services
             await this.advertiseRepository.SaveChangesAsync();
         }
 
-        public Task<PageAdvertisesVm> Update(CreateAdvertiseDTO advertise)
+        public async Task<bool> Update(UpdateAdvertiseDTO advertise, string filePath)
         {
-            throw new NotImplementedException();
+            var dbAd = await this.advertiseRepository.All().FirstOrDefaultAsync(a => a.Id == advertise.Id);
+
+            dbAd.Category = advertise.Category;
+            dbAd.ContactPerson = advertise.ContactPerson;
+            dbAd.ContactEmail = advertise.ContactEmail;
+            dbAd.ContactPhone = advertise.ContactPhone;
+            dbAd.Title = advertise.Title;
+            dbAd.Type = advertise.Type;
+            dbAd.CreatedOn = DateTime.UtcNow;
+            dbAd.Property = new Property
+            {
+                CreatedOn = DateTime.UtcNow,
+                Country = advertise.Property.Country,
+                Town = advertise.Property.Town,
+                Location = advertise.Property.Location,
+                Description = advertise.Property.Description,
+                Lease = advertise.Property.Lease,
+                Price = advertise.Property.Price,
+                Deposit = advertise.Property.Deposit,
+                Images = (await this.filesService.SaveFiles(advertise.Property.Images, filePath).ToListAsync())
+        .Select(img => new Image
+        {
+            Name = img,
+            CreatedOn = DateTime.UtcNow
+        })
+        .ToHashSet()
+            };
+
+            await this.advertiseRepository.AddAsync(dbAd);
+
+            return (await this.advertiseRepository.SaveChangesAsync()) != 0;
         }
 
-        public Task<PageAdvertisesVm> Delete(CreateAdvertiseDTO advertise)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var dbAd = await this.advertiseRepository.All().FirstOrDefaultAsync();
+            await this.advertiseRepository.SoftDelete(dbAd);
+
+            return (await this.advertiseRepository.SaveChangesAsync()) != 0;
+        }
+
+        public async Task<Data.Models.Advertise> GetById(int id)
+        {
+            return await Task.FromResult(this.advertiseRepository.All().FirstOrDefault(a => a.Id == id));
         }
     }
 }

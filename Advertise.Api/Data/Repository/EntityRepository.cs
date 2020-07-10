@@ -1,12 +1,13 @@
 ﻿namespace Advertise.Api.Data.Repository
 {
+    using Advertise.Api.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
 
     public class EntityRepository<T> : IEntityRepository<T>
-        where T : class
+        where T : BaseModel
     {
         public EntityRepository(AdvertDbContext dbContext)
         {
@@ -33,9 +34,17 @@
             this.Entities.Update(entity);
         }
 
-        public virtual void Delete(T entity)
+        public virtual void HardDelete(T entity)
         {
             this.Entities.Remove(entity);
+        }
+
+        public async virtual Task SoftDelete(T entity)
+        {
+            var model = this.Entities.Find(entity);
+
+            model.DeletedOn = DateTime.UtcNow;
+            model.IsDeleted = true;
         }
 
         public async Task<int> SaveChangesAsync()
