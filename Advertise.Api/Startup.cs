@@ -27,6 +27,7 @@ namespace Advertise.Api
             services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
 
             services.AddTransient<IAdvertisesService, AdvertisesService>();
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IFilesService, FilesService>();
 
             services.AddControllers();
