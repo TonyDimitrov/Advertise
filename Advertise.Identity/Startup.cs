@@ -1,6 +1,7 @@
 using Advertise.Common;
 using Advertise.Identity.Data;
 using Advertise.Identity.Data.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Advertise.Identity
 {
@@ -26,6 +29,31 @@ namespace Advertise.Identity
             services
                 .Configure<ApplicationSettings>(this.Configuration
                 .GetSection(nameof(ApplicationSettings)));
+
+            var secret = this.Configuration
+                .GetSection(nameof(ApplicationSettings))
+                .GetValue<string>(nameof(ApplicationSettings.Secret));
+
+            var key = Encoding.ASCII.GetBytes(secret);
+
+            services
+                .AddAuthentication(authentication =>
+                {
+                    authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(bearer =>
+                {
+                    bearer.RequireHttpsMetadata = false;
+                    bearer.SaveToken = true;
+                    bearer.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             services.AddDbContext<IdentityDbContext>(
               options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
