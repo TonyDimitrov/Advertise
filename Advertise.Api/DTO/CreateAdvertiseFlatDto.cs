@@ -1,13 +1,37 @@
 ﻿using Advertise.Api.Constants;
+using Advertise.Api.Data.Models.Enums;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace Advertise.Api.DTO
 {
-    public class CreatePropertyDTO
+    public class CreateAdvertiseFlatDto
     {
+        public AdvertiseType Type { get; set; }
+
+        public Category Category { get; set; }
+
+        public IEnumerable<IFormFile> Images { get; set; }
+
+
+        [MaxLength(ValidationConstants.AdTitleMaxLen)]
+        [MinLength(ValidationConstants.AdTitleMinLen)]
+        [Required]
+        public string Title { get; set; }
+
+        [MaxLength(ValidationConstants.AdContactPersonMaxLen)]
+        [MinLength(ValidationConstants.AdContactPersonMinLen)]
+        [Required]
+        public string ContactPerson { get; set; }
+
+        [MaxLength(ValidationConstants.AdContactPhoneMaxLen)]
+        [MinLength(ValidationConstants.AdContactPhoneMinLen)]
+        public string ContactPhone { get; set; }
+
+        [EmailAddress]
+        public string ContactEmail { get; set; }
+
         [MaxLength(ValidationConstants.PropertyDescriptionMaxLen)]
         [MinLength(ValidationConstants.PropertyDescriptionMinLen)]
         public string Description { get; set; }
@@ -33,8 +57,5 @@ namespace Advertise.Api.DTO
         [MaxLength(ValidationConstants.PropertyTownMaxLen)]
         [MinLength(ValidationConstants.PropertyTownMinLen)]
         public string Town { get; set; }
-
-        [JsonIgnore]
-        public IEnumerable<IFormFile> Images { get; set; }
     }
 }

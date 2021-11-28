@@ -6,6 +6,17 @@ namespace Advertise.Api.DTO
 {
     public class CreateAdvertiseDTO
     {
+        private CreateAdvertiseFlatDto flatDto;
+        public CreateAdvertiseDTO()
+        {
+        }
+
+        public CreateAdvertiseDTO(CreateAdvertiseFlatDto flatDto)
+        {
+            this.flatDto = flatDto;
+            this.MapObject();
+        }
+
         public AdvertiseType Type { get; set; }
 
         public Category Category { get; set; }
@@ -29,5 +40,26 @@ namespace Advertise.Api.DTO
 
         [Required]
         public CreatePropertyDTO Property { get; set; }
+
+        private void MapObject()
+        {
+            this.Type = flatDto.Type;
+            this.Category = flatDto.Category;
+            this.Title = flatDto.Title;
+            this.ContactPerson = flatDto.ContactPerson;
+            this.ContactPhone = flatDto.ContactPhone;
+            this.ContactEmail = flatDto.ContactEmail;
+            this.Property = new CreatePropertyDTO
+            {
+                Country = flatDto.Country,
+                Deposit = flatDto.Deposit,
+                Description = flatDto.Description,
+                Lease = flatDto.Lease,
+                Location = flatDto.Location,
+                Price = flatDto.Price,
+                Town = flatDto.Town,
+                Images = flatDto.Images
+            };
+        }
     }
 }

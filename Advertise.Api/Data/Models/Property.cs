@@ -14,7 +14,7 @@
 
         public double Price { get; set; }
 
-        public double Deposit { get; set; }
+        public double? Deposit { get; set; }
 
         public string Lease { get; set; }
 

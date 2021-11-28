@@ -21,19 +21,25 @@ namespace Advertise.Api.Services
                 foreach (var file in formFiles)
                 {
                     var uniqueName = Guid.NewGuid().ToString();
+                    var extension = Path.GetExtension(file.FileName);
+                    if (extension == null)
+                    {
+                        yield return null;
+                    }
+                    var newQniqueFileName = Path.ChangeExtension(uniqueName, extension);
+                    var fullPath = Path.Combine(path, newQniqueFileName);
 
-                    var fullPath = Path.Combine(path, uniqueName);
-                    var extension = file.Name
-                            .Split('.', StringSplitOptions.RemoveEmptyEntries)
-                            .LastOrDefault();
-                    Path.ChangeExtension(fullPath, extension);
-
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
                     using (var stream = File.Create(fullPath))
                     {
+
                         await file.CopyToAsync(stream);
                     }
 
-                    yield return fullPath;
+                    yield return newQniqueFileName;
                 }
             }
         }

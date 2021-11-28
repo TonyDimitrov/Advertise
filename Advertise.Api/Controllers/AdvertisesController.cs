@@ -3,8 +3,10 @@ using Advertise.Api.DTO;
 using Advertise.Api.Services;
 using Advertise.Api.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -27,39 +29,18 @@ namespace Advertise.Api.Controllers
         [HttpGet("{pageSize?}/{page?}")]
         public async Task<ActionResult<PageAdvertisesVm>> Get(int? pageSize, int? page)
         {
-            this.CallMethod();
+            var json = CallMethod();
             return await this.advertisesService.Get(pageSize, page);
         }
 
-        private void CallMethod()
-        {
-            var obj = new CreateAdvertiseDTO
-            {
-                Type = AdvertiseType.None,
-                Category = Category.Sale,
-                Title = "Lovely 2 bedroom house",
-                ContactEmail = "toni@toni.bg",
-                ContactPerson = "Toni",
-                ContactPhone = "098752645362",
-                Property = new CreatePropertyDTO
-                {
-                    Country = "Bulgaria",
-                    Town = "Kyustendil",
-                    Description = "Lovely 2 bedroom house - with great garden",
-                    Deposit = 300,
-                    Price = 30_000
-                }
-            };
-
-            var toJson = JsonSerializer.Serialize(obj);
-        }
-
         [HttpPost]
-        public async Task<ActionResult<PageAdvertisesVm>> Create(CreateAdvertiseDTO advertise)
+        public async Task<ActionResult<PageAdvertisesVm>> Create([FromForm]CreateAdvertiseFlatDto advertise)
         {
             var root = Path.Combine(this.env.ContentRootPath, "Images");
 
-            await this.advertisesService.Create(advertise, 1, root);
+            await this.advertisesService.Create(new CreateAdvertiseDTO(advertise), 1, root);
+
+            //  return this.Ok(new PageAdvertisesVm());
 
             return this.RedirectToAction(nameof(this.Get));
         }
@@ -80,6 +61,30 @@ namespace Advertise.Api.Controllers
             var isDeleted = await this.advertisesService.Delete(id);
 
             return this.Ok(isDeleted);
+        }
+
+        private string CallMethod()
+        {
+            var advertise = new CreateAdvertiseDTO
+            {
+                Type = AdvertiseType.Regular,
+                Category = Category.Sale,
+                Title = "Lovely 2 bedroom house",
+                ContactEmail = "toni@toni.bg",
+                ContactPerson = "Toni",
+                ContactPhone = "098752645362",
+
+                Property = new CreatePropertyDTO
+                {
+                    Country = "Bulgaria",
+                    Town = "Kyustendil",
+                    Description = "Lovely 2 bedroom house - with great garden",
+                    Price = 60_000,
+                    Images = new List<IFormFile>()
+                }
+            };
+
+            return JsonSerializer.Serialize(advertise);
         }
     }
 }
