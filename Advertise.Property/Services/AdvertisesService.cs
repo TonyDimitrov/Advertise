@@ -24,23 +24,21 @@ namespace Advertise.Property.Services
             pageSize ??= 5;
             page ??= 1;
 
-            var advertises = this.advertiseRepository.All()
+            var advertises = await this.advertiseRepository.All()
                 .OrderByDescending(ad => ad.CreatedOn)
-                .Select(ad => new AdvertisesVm
+                .Select(ad => new AdvertiseVm
                 {
-                    Image = ad.Property.Images.FirstOrDefault().Name,
-                    Type = ad.Type,
+                    Id = ad.Id,
+                    Category = ad.Category,
                     Title = ad.Title,
-                    Property = new PropertyVm
-                    {
-                        Lease = ad.Property.Lease,
-                        Location = ad.Property.Location,
-                        Price = ad.Property.Price
-                    }
+                    Town = ad.Property.Town,
+                    Location = ad.Property.Location,
+                    Ptice = (int)ad.Property.Price,
+                    Image = ad.Property.Images.FirstOrDefault().Name,
                 })
                 .Skip(pageSize.Value * (page.Value - 1))
                 .Take(pageSize.Value)
-                .ToList();
+                .ToListAsync();
 
             var totalPages = (int)Math.Ceiling(this.advertiseRepository.All().Count() / (double)pageSize);
 

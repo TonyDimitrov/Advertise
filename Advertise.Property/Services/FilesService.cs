@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Advertise.Property.Services
 {
@@ -42,6 +41,11 @@ namespace Advertise.Property.Services
                     yield return newQniqueFileName;
                 }
             }
+        }
+
+        public Stream GetFile(string root, string file)
+        {
+            return new FileStream(Path.Combine(root, file), FileMode.Open);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace Advertise.Property
 
                 app.UseDeveloperExceptionPage();
            // }
-
+            app.UseCors("*");
             app.UseHttpsRedirection();
 
             app.UseRouting();

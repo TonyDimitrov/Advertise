@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -19,23 +20,27 @@ namespace Advertise.Property.Controllers
     public class AdvertisesController : ControllerBase
     {
         private readonly IAdvertisesService advertisesService;
+        private readonly IFilesService filesService;
         private readonly IWebHostEnvironment env;
 
-        public AdvertisesController(IAdvertisesService advertisesService, IWebHostEnvironment env)
+        public AdvertisesController(IAdvertisesService advertisesService, IFilesService filesService, IWebHostEnvironment env)
         {
             this.advertisesService = advertisesService;
+            this.filesService = filesService;
             this.env = env;
         }
 
         [HttpGet("{pageSize?}/{page?}")]
         public async Task<ActionResult<PageAdvertisesVm>> Get(int? pageSize, int? page)
         {
-            var json = CallMethod();
-            return await this.advertisesService.Get(pageSize, page);
+            var result = await this.advertisesService.Get(pageSize, page);
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            //this.Response.Headers.Add("Access-Control-Allow-Origin:", "*");
+            return this.Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<PageAdvertisesVm>> Create([FromForm]CreateAdvertiseFlatDto advertise)
+        public async Task<ActionResult<PageAdvertisesVm>> Create([FromForm] CreateAdvertiseFlatDto advertise)
         {
             var root = Path.Combine(this.env.ContentRootPath, "Images");
 
@@ -62,6 +67,24 @@ namespace Advertise.Property.Controllers
             var isDeleted = await this.advertisesService.Delete(id);
 
             return this.Ok(isDeleted);
+        }
+
+        [HttpGet]
+        [Route("GetImage/{image}")]
+        public async Task<ActionResult> GetImage(string image)
+        {
+            if (image == null)
+            {
+                return null;
+            }
+            var root = Path.Combine(this.env.ContentRootPath, "Images");
+
+            var stream = filesService.GetFile(root, image);
+
+            var fileExtension = Path.GetExtension(image).TrimStart('.');
+
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            return new FileStreamResult(stream, $"application/{fileExtension}");
         }
 
         private string CallMethod()

@@ -20,6 +20,6 @@ namespace Advertise.Property.ViewModels
 
         public bool IsLastPage { get; set; }
 
-        public IEnumerable<AdvertisesVm> Advertises { get; set; }
+        public IEnumerable<AdvertiseVm> Advertises { get; set; }
     }
 }
