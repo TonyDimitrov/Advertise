@@ -35,7 +35,16 @@ namespace Advertise.Property.Controllers
         {
             var result = await this.advertisesService.Get(pageSize, page);
             HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            //this.Response.Headers.Add("Access-Control-Allow-Origin:", "*");
+            return this.Ok(result);
+        }
+
+
+        [HttpGet]
+        [Route("details/{id}")]
+        public async Task<ActionResult<PageAdvertisesVm>> Details(int id)
+        {
+            var result = await this.advertisesService.GetById(id);
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
             return this.Ok(result);
         }
 
