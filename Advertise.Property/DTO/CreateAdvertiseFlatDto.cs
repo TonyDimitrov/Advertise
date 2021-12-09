@@ -8,54 +8,54 @@ namespace Advertise.Api.DTO
 {
     public class CreateAdvertiseFlatDto
     {
-        public AdvertiseType Type { get; set; }
+        public AdvertiseType? Type { get; set; }
 
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
         public IEnumerable<IFormFile> Images { get; set; }
 
 
-        [MaxLength(ValidationConstants.AdTitleMaxLen)]
-        [MinLength(ValidationConstants.AdTitleMinLen)]
-        [Required]
+        //[MaxLength(ValidationConstants.AdTitleMaxLen)]
+        //[MinLength(ValidationConstants.AdTitleMinLen)]
+        //[Required]
         public string Title { get; set; }
 
-        [MaxLength(ValidationConstants.AdContactPersonMaxLen)]
-        [MinLength(ValidationConstants.AdContactPersonMinLen)]
-        [Required]
+        //[MaxLength(ValidationConstants.AdContactPersonMaxLen)]
+        //[MinLength(ValidationConstants.AdContactPersonMinLen)]
+        //[Required]
         public string ContactPerson { get; set; }
 
-        [MaxLength(ValidationConstants.AdContactPhoneMaxLen)]
-        [MinLength(ValidationConstants.AdContactPhoneMinLen)]
+        //[MaxLength(ValidationConstants.AdContactPhoneMaxLen)]
+        //[MinLength(ValidationConstants.AdContactPhoneMinLen)]
         public string ContactPhone { get; set; }
 
-        [EmailAddress]
+        //[EmailAddress]
         public string ContactEmail { get; set; }
 
-        [MaxLength(ValidationConstants.PropertyDescriptionMaxLen)]
-        [MinLength(ValidationConstants.PropertyDescriptionMinLen)]
+        //[MaxLength(ValidationConstants.PropertyDescriptionMaxLen)]
+        //[MinLength(ValidationConstants.PropertyDescriptionMinLen)]
         public string Description { get; set; }
 
-        [Range(ValidationConstants.PropertyPriceMinLen, ValidationConstants.PropertyPriceMaxLen)]
+        //[Range(ValidationConstants.PropertyPriceMinLen, ValidationConstants.PropertyPriceMaxLen)]
         public double Price { get; set; }
 
-        [Range(ValidationConstants.PropertyDepositMinLen, ValidationConstants.PropertyDepositMaxLen)]
+        //[Range(ValidationConstants.PropertyDepositMinLen, ValidationConstants.PropertyDepositMaxLen)]
         public double? Deposit { get; set; }
 
-        [MaxLength(ValidationConstants.PropertyLeaseMaxLen)]
-        [MinLength(ValidationConstants.PropertyDepositMinLen)]
+        //[MaxLength(ValidationConstants.PropertyLeaseMaxLen)]
+        //[MinLength(ValidationConstants.PropertyDepositMinLen)]
         public string Lease { get; set; }
 
-        [MaxLength(ValidationConstants.PropertyLocationMaxLen)]
-        [MinLength(ValidationConstants.PropertyLocationMinLen)]
+        //[MaxLength(ValidationConstants.PropertyLocationMaxLen)]
+        //[MinLength(ValidationConstants.PropertyLocationMinLen)]
         public string Location { get; set; }
 
-        [MaxLength(ValidationConstants.PropertyCountyMaxLen)]
-        [MinLength(ValidationConstants.PropertyCountyMinLen)]
+        //[MaxLength(ValidationConstants.PropertyCountyMaxLen)]
+        //[MinLength(ValidationConstants.PropertyCountyMinLen)]
         public string Country { get; set; }
 
-        [MaxLength(ValidationConstants.PropertyTownMaxLen)]
-        [MinLength(ValidationConstants.PropertyTownMinLen)]
+        //[MaxLength(ValidationConstants.PropertyTownMaxLen)]
+        //[MinLength(ValidationConstants.PropertyTownMinLen)]
         public string Town { get; set; }
     }
 }

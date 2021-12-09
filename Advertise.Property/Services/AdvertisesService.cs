@@ -135,9 +135,33 @@ namespace Advertise.Property.Services
             return (await this.advertiseRepository.SaveChangesAsync()) != 0;
         }
 
-        public async Task<Data.Models.Advertise> GetById(int id)
+        public async Task<DetailsPropertyDTO> GetById(int id)
         {
-            return await Task.FromResult(this.advertiseRepository.All().FirstOrDefault(a => a.Id == id));
+            var property = this.advertiseRepository.All()
+             .Include(a => a.Property)
+             .ThenInclude(p => p.Images)
+             .FirstOrDefault(a => a.Id == id);
+
+            return await Task.FromResult(
+              new DetailsPropertyDTO
+              {
+                  Category = property.Category,
+                  ContactEmail = property.ContactEmail,
+                  ContactPerson = property.ContactPerson,
+                  ContactPhone = property.ContactPhone,
+                  Country = property.Property.Country,
+                  Deposit = property.Property.Deposit,
+                  Description = property.Property.Description,
+                  Lease = property.Property.Lease,
+                  Location = property.Property.Location,
+                  Price = property.Property.Price,
+                  PropertyId = property.Property.Id,
+                  Title = property.Title,
+                  Town = property.Property.Town,
+                  Images = property.Property.Images
+                  .Select(i => i.Name)
+                  .ToHashSet()
+              });
         }
     }
 }

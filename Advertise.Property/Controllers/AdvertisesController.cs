@@ -38,10 +38,9 @@ namespace Advertise.Property.Controllers
             return this.Ok(result);
         }
 
-
         [HttpGet]
         [Route("details/{id}")]
-        public async Task<ActionResult<PageAdvertisesVm>> Details(int id)
+        public async Task<ActionResult<DetailsPropertyDTO>> Details(int id)
         {
             var result = await this.advertisesService.GetById(id);
             HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
@@ -51,13 +50,11 @@ namespace Advertise.Property.Controllers
         [HttpPost]
         public async Task<ActionResult<PageAdvertisesVm>> Create([FromForm] CreateAdvertiseFlatDto advertise)
         {
-            var root = Path.Combine(this.env.ContentRootPath, "Images");
+            //var root = Path.Combine(this.env.ContentRootPath, "Images");
 
-            await this.advertisesService.Create(new CreateAdvertiseDTO(advertise), 1, root);
+            //await this.advertisesService.Create(new CreateAdvertiseDTO(advertise), 1, root);
 
-            //  return this.Ok(new PageAdvertisesVm());
-
-            return this.RedirectToAction(nameof(this.Get));
+            return this.Ok();
         }
 
         [HttpPut]
@@ -95,6 +92,16 @@ namespace Advertise.Property.Controllers
             HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
             return new FileStreamResult(stream, $"application/{fileExtension}");
         }
+
+        //[HttpOptions]
+        //public IActionResult FindOptions()
+        //{
+        //    HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { (string)HttpContext.Request.Headers["Origin"] });
+        //    HttpContext.Response.Headers.Add("Access-Control-Allow-Methods", new[] { "POST" });
+        //    HttpContext.Response.Headers.Add("Access-Control-Allow-Headers", "X-Token, Content-Type");
+
+        //    return NoContent();
+        //}
 
         private string CallMethod()
         {

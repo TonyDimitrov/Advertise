@@ -6,7 +6,7 @@ namespace Advertise.Property.Services
 {
     public interface IAdvertisesService
     {
-        Task<Data.Models.Advertise> GetById(int id);
+        Task<DetailsPropertyDTO> GetById(int id);
 
         Task<PageAdvertisesVm> Get(int? pageSize, int? page);
 

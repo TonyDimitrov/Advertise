@@ -31,6 +31,16 @@ namespace Advertise.Property
             services.AddTransient<IFilesService, FilesService>();
 
             services.AddControllers();
+
+            services.AddCors(option =>
+            {
+                option.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,9 +56,15 @@ namespace Advertise.Property
                 }
 
                 app.UseDeveloperExceptionPage();
-           // }
-            app.UseCors("*");
-            app.UseHttpsRedirection();
+            // }
+
+            app.UseCors();
+            //app.UseCors(builder =>
+            //builder.WithOrigins("http://localhost:3000")
+            //.AllowAnyHeader()
+            //.AllowAnyMethod()
+            //.AllowCredentials());
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
