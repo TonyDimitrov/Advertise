@@ -4,14 +4,16 @@ using Advertise.Property.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Advertise.Property.Migrations
 {
     [DbContext(typeof(AdvertDbContext))]
-    partial class AdvertDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211212121922_PropertyTypeNullable")]
+    partial class PropertyTypeNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,7 @@ namespace Advertise.Property.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ExpirationDate")
+                    b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -59,7 +61,7 @@ namespace Advertise.Property.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Type")
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -132,7 +134,7 @@ namespace Advertise.Property.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("DiscountedPrice")
+                    b.Property<double>("DiscountedPrice")
                         .HasColumnType("float");
 
                     b.Property<bool>("IsDeleted")

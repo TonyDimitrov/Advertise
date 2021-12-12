@@ -18,7 +18,7 @@ namespace Advertise.Property.DTO
             this.MapObject();
         }
 
-        public AdvertiseType Type { get; set; }
+        public AdvertiseType? Type { get; set; }
 
         public Category Category { get; set; }
 
@@ -44,8 +44,8 @@ namespace Advertise.Property.DTO
 
         private void MapObject()
         {
-            this.Type = flatDto.Type.Value;
-            this.Category = flatDto.Category.Value;
+            this.Type = flatDto.Type;
+            this.Category = flatDto.Category;
             this.Title = flatDto.Title;
             this.ContactPerson = flatDto.ContactPerson;
             this.ContactPhone = flatDto.ContactPhone;

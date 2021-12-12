@@ -39,6 +39,7 @@ namespace Advertise.Property
                     builder.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod();
+                    //.AllowCredentials();
                 });
             });
         }
@@ -59,13 +60,7 @@ namespace Advertise.Property
             // }
 
             app.UseCors();
-            //app.UseCors(builder =>
-            //builder.WithOrigins("http://localhost:3000")
-            //.AllowAnyHeader()
-            //.AllowAnyMethod()
-            //.AllowCredentials());
-            //app.UseHttpsRedirection();
-
+            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseAuthorization();

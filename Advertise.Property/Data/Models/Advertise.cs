@@ -5,13 +5,13 @@ namespace Advertise.Property.Data.Models
 {
     public class Advertise : BaseModel
     {
-        public AdvertiseType Type { get; set; }
+        public AdvertiseType? Type { get; set; }
 
         public Category Category { get; set; }
 
         public string Title { get; set; }
 
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
 
         public string ContactPerson { get; set; }
 

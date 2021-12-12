@@ -34,7 +34,7 @@ namespace Advertise.Property.Controllers
         public async Task<ActionResult<PageAdvertisesVm>> Get(int? pageSize, int? page)
         {
             var result = await this.advertisesService.Get(pageSize, page);
-            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
             return this.Ok(result);
         }
 
@@ -43,16 +43,16 @@ namespace Advertise.Property.Controllers
         public async Task<ActionResult<DetailsPropertyDTO>> Details(int id)
         {
             var result = await this.advertisesService.GetById(id);
-            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
             return this.Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<PageAdvertisesVm>> Create([FromForm] CreateAdvertiseFlatDto advertise)
         {
-            //var root = Path.Combine(this.env.ContentRootPath, "Images");
+            var root = Path.Combine(this.env.ContentRootPath, "Images");
 
-            //await this.advertisesService.Create(new CreateAdvertiseDTO(advertise), 1, root);
+            await this.advertisesService.Create(new CreateAdvertiseDTO(advertise), 1, root);
 
             return this.Ok();
         }

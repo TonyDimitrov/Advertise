@@ -18,7 +18,7 @@
 
         public string Lease { get; set; }
 
-        public double DiscountedPrice { get; set; }
+        public double? DiscountedPrice { get; set; }
 
         public string Location { get; set; }
 
