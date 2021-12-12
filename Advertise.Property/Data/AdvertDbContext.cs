@@ -21,5 +21,12 @@
         public DbSet<Review> Reviews { get; set; }
 
         public DbSet<Raffle> Raffles { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+        }
     }
 }

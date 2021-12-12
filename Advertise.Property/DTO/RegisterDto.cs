@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Advertise.Property.DTO
 {
-    public class CreateUserDTO
+    public class RegisterDto
     {
         [MaxLength(ValidationConstants.UserNameMaxLen)]
         [MinLength(ValidationConstants.UserNameMinLen)]
@@ -33,6 +33,7 @@ namespace Advertise.Property.DTO
 
         [MaxLength(ValidationConstants.UserPasswordMaxLen)]
         [MinLength(ValidationConstants.UserPasswordMinLen)]
+        [Compare("Password")]
         [Required]
         public string ConfirmPassword { get; set; }
     }

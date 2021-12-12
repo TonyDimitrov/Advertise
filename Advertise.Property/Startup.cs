@@ -8,7 +8,6 @@ namespace Advertise.Property
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
 
     public class Startup
     {
@@ -22,26 +21,29 @@ namespace Advertise.Property
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddDbContext<AdvertDbContext>(
               options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
 
+            services.AddTransient<IJwtService, JwtService>();
             services.AddTransient<IAdvertisesService, AdvertisesService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IFilesService, FilesService>();
 
             services.AddControllers();
 
-            services.AddCors(option =>
-            {
-                option.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-                    //.AllowCredentials();
-                });
-            });
+
+            //services.AddCors(option =>
+            //{
+            //    option.AddDefaultPolicy(builder =>
+            //    {
+            //        builder.AllowAnyOrigin()
+            //        .AllowAnyHeader()
+            //        .AllowAnyMethod();
+            //    });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,19 +51,24 @@ namespace Advertise.Property
         {
             //if (env.IsDevelopment())
             //{
-                using (var serviceScope = app.ApplicationServices.CreateScope())
-                {
-                    var dbContext = serviceScope.ServiceProvider.GetRequiredService<AdvertDbContext>();
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<AdvertDbContext>();
 
-                    dbContext.Database.Migrate();
-                }
+                dbContext.Database.Migrate();
+            }
 
-                app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();
             // }
 
-            app.UseCors();
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseCors(options => options
+            .WithOrigins(new string[] { "http://localhost:3000/" })
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 
             app.UseAuthorization();
             app.UseAuthentication();

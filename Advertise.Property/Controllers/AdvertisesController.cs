@@ -93,16 +93,6 @@ namespace Advertise.Property.Controllers
             return new FileStreamResult(stream, $"application/{fileExtension}");
         }
 
-        //[HttpOptions]
-        //public IActionResult FindOptions()
-        //{
-        //    HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { (string)HttpContext.Request.Headers["Origin"] });
-        //    HttpContext.Response.Headers.Add("Access-Control-Allow-Methods", new[] { "POST" });
-        //    HttpContext.Response.Headers.Add("Access-Control-Allow-Headers", "X-Token, Content-Type");
-
-        //    return NoContent();
-        //}
-
         private string CallMethod()
         {
             var advertise = new CreateAdvertiseDTO

@@ -1,4 +1,5 @@
-﻿using Advertise.Property.DTO;
+﻿using Advertise.Property.Data.Models;
+using Advertise.Property.DTO;
 using Advertise.Property.ViewModels;
 using System.Threading.Tasks;
 
@@ -8,6 +9,12 @@ namespace Advertise.Property.Services
     {
         Task<UserViewModel> GetAsync(int id);
 
-        Task<bool> CreateAsync(CreateUserDTO user);
+        Task<User> GetByEmailAsync(string email);
+
+        Task<bool> RegisterAsync(RegisterDto user);
+
+        Task<bool> Login(LoginDto login);
+
+        Task<bool> Logout();
     }
 }

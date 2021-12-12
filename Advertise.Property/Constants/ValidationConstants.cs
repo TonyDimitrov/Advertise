@@ -38,6 +38,9 @@
         public const int UserNameMaxLen = 50;
         public const int UserNameMinLen = 2;
 
+        public const int UserPasswordMaxLen = 50;
+        public const int UserPasswordMinLen = 2;
+
         public const int UserAddressMaxLen = 150;
         public const int UserAddressMinLen = 2;
 

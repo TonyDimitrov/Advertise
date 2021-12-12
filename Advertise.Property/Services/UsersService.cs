@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace Advertise.Property.Services
 {
@@ -17,6 +18,7 @@ namespace Advertise.Property.Services
         {
             this.userRepository = userRepository;
         }
+
         public async Task<UserViewModel> GetAsync(int id)
         {
             return await this.userRepository.All()
@@ -30,16 +32,32 @@ namespace Advertise.Property.Services
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> CreateAsync(CreateUserDTO user)
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await userRepository.All().FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public Task<bool> Login(LoginDto login)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> Logout()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> RegisterAsync(RegisterDto register)
         {
             var dbUser = new User
             {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                Email = register.Email,
+                FirstName = register.FirstName,
+                LastName = register.LastName,
                 CreatedOn = DateTime.UtcNow,
-                PhoneNumber = user.PhoneNumber,
-                Address = user.Address
+                PhoneNumber = register.PhoneNumber,
+                Address = register.Address,
+                Password = BCryptNet.HashPassword(register.Password)
             };
 
             await this.userRepository.AddAsync(dbUser);
